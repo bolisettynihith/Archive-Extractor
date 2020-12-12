@@ -3,9 +3,8 @@ import zipfile
 from flask import Flask, request, redirect, url_for, flash, render_template, send_file, abort, jsonify
 from werkzeug.utils import secure_filename
 
-
+app = Flask(__name__)
 ALLOWED_EXTENSIONS = set(['zip', 'tar', 'rar'])
-
 
 @app.route('/check/<filename>')
 def allowed_file(filename):
@@ -14,7 +13,5 @@ def allowed_file(filename):
     else:
         return jsonify({'check': False})
 
-
 if __name__ == "__main__":
-    #app.secret_key = 'someaprghaerg'
     app.run(host='0.0.0.0',port=5001, debug=True)

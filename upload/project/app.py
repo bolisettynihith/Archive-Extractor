@@ -77,7 +77,5 @@ def upload_file(req_path):
     files = os.listdir(abs_path)
     return render_template('index.html', files=files)
 
-
 if __name__ == "__main__":
-    #app.secret_key = 'someaprghaerg'
     app.run(host='0.0.0.0',port=5000, debug=True)
