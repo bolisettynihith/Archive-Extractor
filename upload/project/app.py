@@ -1,24 +1,13 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import os
 import zipfile
 from flask import Flask, request, redirect, url_for, flash, render_template, send_file, abort
 from werkzeug.utils import secure_filename
+from requests import get
 
 UPLOAD_FOLDER = os.path.dirname(os.path.realpath(__file__)) + "/Uploads/"
-ALLOWED_EXTENSIONS = set(['zip', 'tar', 'rar'])
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 30 * 1024
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-def retext(filename):
-    extension = filename.split(".",1)[1]
-    return extension
 
 def extract(filename, ext):
     if(ext == "zip"):
@@ -28,6 +17,16 @@ def extract(filename, ext):
     elif(ext == "rar"):
         os.system("unrar e {}".format(filename))
 
+def allowed_file(filename):
+    data = get('http://localhost:5001/check/{}'.format(filename))
+    if(data.json()['check']):
+        return True
+    else:
+        return False
+
+def retext(filename):
+    data = get('http://localhost:5002/retext/{}'.format(filename))
+    return data.json()['extension']
 
 @app.route('/', methods=['GET', 'POST'], defaults={'req_path': ''})
 @app.route('/<path:req_path>', methods=['GET', 'POST'])

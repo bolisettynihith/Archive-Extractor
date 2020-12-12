@@ -16,6 +16,6 @@ COPY project /home/joyhopkins/project
 RUN chown -R joyhopkins:joyhopkins /home/joyhopkins/project/ && \
     chmod -R 744 /home/joyhopkins/project/
 
-EXPOSE 5000
+EXPOSE 5002
 
 ENTRYPOINT ["bash", "/root/start.sh"]
